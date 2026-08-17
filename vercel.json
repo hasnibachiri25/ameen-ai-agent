@@ -1,32 +1,15 @@
 {
   "version": 2,
-  "buildCommand": "npm install",
-  "outputDirectory": ".",
-  "routes": [
+  "builds": [
     {
-      "src": "/api/(.*)",
-      "dest": "server.js"
-    },
-    {
-      "src": "/admin",
-      "dest": "public/admin.html"
-    },
-    {
-      "src": "/whatsapp-setup",
-      "dest": "public/whatsapp-setup.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/public/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "server.js"
+      "src": "server.js",
+      "use": "@vercel/node"
     }
   ],
-  "functions": {
-    "server.js": {
-      "runtime": "nodejs20.x"
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "server.js"
     }
-  }
+  ]
 }
