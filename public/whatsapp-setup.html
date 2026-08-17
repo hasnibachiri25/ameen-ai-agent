@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل ربط واتساب - أمين لتأمين</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ameenNavy: '#0A1F44',
+                        ameenBlue: '#4A90D9',
+                        whatsappGreen: '#25D366'
+                    },
+                    fontFamily: {
+                        tajawal: ['Tajawal', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-tajawal bg-gray-50 min-h-screen text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-ameenNavy text-white shadow-md px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3 space-x-reverse">
+            <img src="/ameen_logo.jpeg" alt="شعار أمين" class="w-10 h-10 rounded-full object-cover border border-ameenBlue bg-black p-0.5">
+            <div>
+                <h1 class="font-bold text-lg">دليل ربط مساعد أمين الذكي بـ WhatsApp Business API</h1>
+                <p class="text-xs text-gray-300">أمين للتأمين (Regal Insurance)</p>
+            </div>
+        </div>
+        <div>
+            <a href="/admin" class="bg-ameenBlue hover:bg-blue-600 text-white text-xs px-3 py-2 rounded-lg transition flex items-center gap-1.5 shadow">
+                <i class="fa-solid fa-arrow-right"></i> العودة للوحة التحكم
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-8 space-y-8">
+        
+        <!-- Intro Card -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 bg-whatsappGreen text-white rounded-2xl flex items-center justify-center text-2xl">
+                    <i class="fa-brands fa-whatsapp"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900">ربط مساعد أمين الذكي مع رقم واتساب الرسمي (+968 76888817)</h2>
+                    <p class="text-sm text-gray-500">دليل خطوة بخطوة لإعداد Meta Cloud API وربط خادم Node.js مع واتساب.</p>
+                </div>
+            </div>
+            <p class="text-sm text-gray-600 leading-relaxed">
+                يتيح لك هذا التكامل استقبال رسائل العملاء على رقم الواتساب الخاص بشركة أمين ومعالجتها تلقائياً عبر الذكاء الاصطناعي (مساعد أمين الذكي)، مع حفظ الطلبات (Leads) مباشرة في قاعدة بيانات النظام.
+            </p>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 space-y-4">
+            <div class="flex items-center gap-3">
+                <span class="w-8 h-8 bg-ameenNavy text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                <h3 class="text-lg font-bold text-ameenNavy">إعداد حساب Meta for Developers</h3>
+            </div>
+            <ul class="list-disc list-inside space-y-2 text-sm text-gray-600 mr-4">
+                قم بزيارة <a href="https://developers.facebook.com" target="_blank" class="text-ameenBlue underline">موقع مطوري ميتا</a> وسجل الدخول بحسابك.
+                إنشاء تطبيق جديد (Create App) واختيار نوع التطبيق <strong>Business</strong>.
+                أضف منتج **WhatsApp** إلى تطبيقك وانتقل إلى لوحة تحكم WhatsApp Setup للحصول على رمز التوثيق المؤقت أو الدائم (Permanent Access Token).
+            </ul>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 space-y-4">
+            <div class="flex items-center gap-3">
+                <span class="w-8 h-8 bg-ameenNavy text-white rounded-full flex items-center justify-center font-bold text-sm">2</span>
+                <h3 class="text-lg font-bold text-ameenNavy">إعداد Webhook في الخادم</h3>
+            </div>
+            <p class="text-sm text-gray-600 leading-relaxed">
+                لكي يستقبل خادم Node.js الخاص بك الرسائل من ميتا، تحتاج إلى إضافة مسار Webhook في ملف <code class="bg-gray-100 px-2 py-1 rounded text-xs font-mono">server.js</code> بالشكل التالي:
+            </p>
+            <pre class="bg-gray-900 text-green-400 p-4 rounded-xl text-xs font-mono overflow-x-auto" dir="ltr">
+// WhatsApp Webhook Verification
+app.get('/webhook', (req, res) => {
+  const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || 'ameen_secure_token';
+  const mode = req.query['hub.mode'];
+  const token = req.query['hub.verify_token'];
+  const challenge = req.query['hub.challenge'];
+
+  if (mode === 'and' && token === VERIFY_TOKEN) {
+    res.status(200).send(challenge);
+  } else {
+    res.sendStatus(403);
+  }
+});
+
+// WhatsApp Incoming Messages
+app.post('/webhook', async (req, res) => {
+  // استقبال الرسالة ومعالجتها عبر OpenAI وتحويلها للعميل عبر WhatsApp Cloud API
+  res.sendStatus(200);
+});
+            </pre>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 space-y-4">
+            <div class="flex items-center gap-3">
+                <span class="w-8 h-8 bg-ameenNavy text-white rounded-full flex items-center justify-center font-bold text-sm">3</span>
+                <h3 class="text-lg font-bold text-ameenNavy">نشر التطبيق على السحابة (Railway أو Render)</h3>
+            </div>
+            <p class="text-sm text-gray-600 leading-relaxed">
+                بما أن Meta Webhook يتطلب رابط HTTPS عام، يمكنك نشر هذا المشروع على Railway أو Render خلال دقائق باستخدام ملف <code class="bg-gray-100 px-2 py-1 rounded text-xs font-mono">Dockerfile</code> المرفق في المشروع.
+                بعد نشر التطبيق والحصول على الرابط العام (مثلاً: <code class="bg-gray-100 px-2 py-1 rounded text-xs font-mono">https://your-app.up.railway.app/webhook</code>)، قم بوضع هذا الرابط في لوحة تحكم Meta ومعه رمز التحقق.
+            </p>
+        </div>
+
+        <!-- Support Box -->
+        <div class="bg-blue-50 border border-blue-100 rounded-2xl p-6 text-center space-y-3">
+            <h4 class="font-bold text-ameenNavy text-lg">هل تحتاج مساعدة في إعداد الربط التقني؟</h4>
+            <p class="text-sm text-gray-600 max-w-xl mx-auto">
+                فريق الدعم الفني في أمين جاهز لمساعدتك في إعداد وتوصيل نظام الواتساب التجاري.
+            </p>
+            <a href="https://wa.me/96876888817" target="_blank" class="inline-flex items-center gap-2 bg-whatsappGreen text-white px-6 py-2.5 rounded-xl font-medium text-sm shadow hover:bg-emerald-600 transition">
+                <i class="fa-brands fa-whatsapp text-lg"></i> تواصل مع الدعم الفني
+            </a>
+        </div>
+
+    </main>
+
+</body>
+</html>

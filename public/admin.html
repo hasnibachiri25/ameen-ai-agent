@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم الطلبات - أمين لتأمين</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ameenNavy: '#0A1F44',
+                        ameenBlue: '#4A90D9'
+                    },
+                    fontFamily: {
+                        tajawal: ['Tajawal', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-tajawal bg-gray-50 min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-ameenNavy text-white shadow-md px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3 space-x-reverse">
+            <img src="/ameen_logo.jpeg" alt="شعار أمين" class="w-10 h-10 rounded-full object-cover border border-ameenBlue bg-black p-0.5">
+            <div>
+                <h1 class="font-bold text-lg">لوحة تحكم طلبات العملاء (Leads)</h1>
+                <p class="text-xs text-gray-300">أمين للتأمين (Regal Insurance Management Services)</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-3 space-x-reverse">
+            <a href="/whatsapp-setup" class="bg-whatsappGreen bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-2 rounded-lg transition flex items-center gap-1.5 shadow">
+                <i class="fa-brands fa-whatsapp text-sm"></i> ربط واتساب
+            </a>
+            <a href="/" class="bg-ameenBlue hover:bg-blue-600 text-white text-xs px-3 py-2 rounded-lg transition flex items-center gap-1.5 shadow">
+                <i class="fa-solid fa-comments"></i> معاينة المساعد الذكي
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">إجمالي الطلبات (Leads)</p>
+                    <h3 id="total-leads-count" class="text-3xl font-black text-ameenNavy mt-1">--</h3>
+                </div>
+                <div class="w-14 h-14 bg-blue-50 text-ameenBlue rounded-2xl flex items-center justify-center text-2xl">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">أنواع التأمين النشطة</p>
+                    <h3 id="types-count" class="text-3xl font-black text-ameenNavy mt-1">--</h3>
+                </div>
+                <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">حالة الخادم</p>
+                    <h3 class="text-xl font-bold text-green-600 mt-2 flex items-center gap-2">
+                        <span class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span> متصل ويعمل
+                    </h3>
+                </div>
+                <div class="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-2xl">
+                    <i class="fa-solid fa-server"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leads Table Section -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                <h3 class="font-bold text-gray-800 text-lg">سجل العملاء المحتملين (Leads Database)</h3>
+                <button onclick="loadLeads()" class="text-ameenBlue hover:text-blue-700 text-sm font-medium flex items-center gap-1">
+                    <i class="fa-solid fa-rotate"></i> تحديث القائمة
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-right border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 text-gray-600 text-xs font-bold uppercase tracking-wider border-b border-gray-200">
+                            <th class="py-3 px-6">#</th>
+                            <th class="py-3 px-6">اسم العميل</th>
+                            <th class="py-3 px-6">رقم الهاتف</th>
+                            <th class="py-3 px-6">نوع التأمين</th>
+                            <th class="py-3 px-6">ملاحظات</th>
+                            <th class="py-3 px-6">تاريخ الطلب</th>
+                            <th class="py-3 px-6 text-center">إجراءات سريعة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leads-table-body" class="divide-y divide-gray-100 text-sm text-gray-700">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="no-leads" class="hidden text-center py-12 text-gray-400">
+                <i class="fa-solid fa-folder-open text-4xl mb-2"></i>
+                <p>لا توجد طلبات مسجلة حتى الآن</p>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        async function loadLeads() {
+            try {
+                const res = await fetch('/api/leads');
+                const leads = await res.json();
+                
+                const statsRes = await fetch('/api/stats');
+                const stats = await statsRes.json();
+
+                document.getElementById('total-leads-count').textContent = stats.totalLeads;
+                document.getElementById('types-count').textContent = stats.byType.length;
+
+                const tbody = document.getElementById('leads-table-body');
+                const noLeads = document.getElementById('no-leads');
+                tbody.innerHTML = '';
+
+                if (leads.length === 0) {
+                    noLeads.classList.remove('hidden');
+                    return;
+                }
+                noLeads.classList.add('hidden');
+
+                leads.forEach((lead, index) => {
+                    const dateStr = new Date(lead.created_at).toLocaleString('ar-OM');
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-gray-50 transition';
+                    tr.innerHTML = `
+                        <td class="py-4 px-6 text-gray-400 text-xs">${index + 1}</td>
+                        <td class="py-4 px-6 font-bold text-gray-900">${escapeHtml(lead.name)}</td>
+                        <td class="py-4 px-6 font-mono dir-ltr text-left">
+                            <a href="tel:${lead.phone}" class="text-ameenBlue hover:underline">${escapeHtml(lead.phone)}</a>
+                        </td>
+                        <td class="py-4 px-6">
+                            <span class="bg-blue-50 text-ameenBlue text-xs px-2.5 py-1 rounded-full font-medium">${escapeHtml(lead.insurance_type)}</span>
+                        </td>
+                        <td class="py-4 px-6 text-gray-500 text-xs max-w-xs truncate">${escapeHtml(lead.notes || '-')}</td>
+                        <td class="py-4 px-6 text-gray-400 text-xs">${dateStr}</td>
+                        <td class="py-4 px-6 text-center space-x-2 space-x-reverse">
+                            <a href="https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent('مرحباً بك أستاذ ' + lead.name + '، معك فريق أمين للتأمين بخصوص طلبك لـ ' + lead.insurance_type)}" target="_blank" class="bg-emerald-500 hover:bg-emerald-600 text-white p-2 rounded-lg text-xs inline-flex items-center justify-center transition shadow-sm" title="مراسلة عبر واتساب">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </a>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error('Failed to load leads:', err);
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        loadLeads();
+        setInterval(loadLeads, 15000); // Auto refresh every 15s
+    </script>
+</body>
+</html>

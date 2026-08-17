@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "env": [
+    "OPENAI_API_KEY",
+    "ADMIN_PASSWORD",
+    "PORT"
+  ],
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/admin",
+      "dest": "public/admin.html"
+    },
+    {
+      "src": "/whatsapp-setup",
+      "dest": "public/whatsapp-setup.html"
+    },
+    {
+      "src": "/.*",
+      "dest": "public/index.html"
+    }
+  ]
+}
