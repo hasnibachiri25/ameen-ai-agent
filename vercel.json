@@ -1,26 +1,7 @@
 {
   "version": 2,
-  "env": {
-    "OPENAI_API_KEY": {
-      "required": true
-    },
-    "ADMIN_PASSWORD": {
-      "required": false
-    },
-    "PORT": {
-      "default": "3000"
-    }
-  },
-  "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "public/**",
-      "use": "@vercel/static"
-    }
-  ],
+  "buildCommand": "npm install",
+  "outputDirectory": ".",
   "routes": [
     {
       "src": "/api/(.*)",
@@ -35,8 +16,17 @@
       "dest": "public/whatsapp-setup.html"
     },
     {
-      "src": "/.*",
-      "dest": "public/index.html"
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "server.js"
     }
-  ]
+  ],
+  "functions": {
+    "server.js": {
+      "runtime": "nodejs20.x"
+    }
+  }
 }
